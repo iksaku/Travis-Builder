@@ -1,6 +1,7 @@
 <?php
 $deployBranch = !getenv("DEPLOY_BRANCH") ? getenv("TRAVIS_BRANCH") : getenv("DEPLOY_BRANCH");
 $token = getenv("TOKEN");
+putenv("TOKEN=''");
 $buildName = getenv("BUILD_NAME");
 $pullRequest = getenv("TRAVIS_PULL_REQUEST") !== false;
 if($pullRequest){
