@@ -3,11 +3,10 @@ $deployBranch = !getenv("DEPLOY_BRANCH") ? getenv("TRAVIS_BRANCH") : getenv("DEP
 $token = getenv("TOKEN");
 putenv("TOKEN=''");
 $pullRequest = getenv("TRAVIS_PULL_REQUEST") !== false;
-$rootPath = rtrim(getenv("TRAVIS_BUILD_DIR"), "/");
-    $rootPath = explode("/", $rootPath);
-    array_pop($rootPath);
-    $rootPath = implode("/", $rootPath) . "/";
-    $pharPath = $rootPath . "build";
+$travisDir = rtrim(getenv("TRAVIS_BUILD_DIR"), "/");
+$rootDir = implode("/", array_pop(explode("/", $travisDir)));
+$serverDir = $rootDir . "/server";
+$pharPath = $rootDir . "/build";
 putenv("PHAR_PATH=$pharPath");
 if($pullRequest){
     echo "[Info] 'Pull Request' detected, build will not be deployed.";
@@ -19,13 +18,13 @@ if(!$token){
 }
 
 echo "[Info] Setting up environment...";
-chdir("$rootPath");
+chdir("$rootDir");
 exec("mkdir server");
 exec("mkdir build");
 chdir("server");
 exec("mkdir plugins");
-copy(getenv("TRAVIS_BUILD_DIR") . "/travis/TravisBuilder.php", $rootPath . "server/plugins");
-copy(getenv("TRAVIS_BUILD_DIR"), $rootPath . "server/plugins/" . array_pop(explode("/", getenv("TRAVIS_REPO_SLUG"))));
+copy($travisDir . "/travis/TravisBuilder.php",$serverDir . "/plugins");
+copy($travisDir, $serverDir . "/plugins" . array_pop(explode("/", getenv("TRAVIS_REPO_SLUG"))));
 exec("curl -sL get.pocketmine.net | bash -s - -v " . (getenv("PM_VERSION") !== false ? getenv("PM_VERSION") : "stable"));
 
 echo "[Info] Starting PocketMine-MP...";
@@ -37,7 +36,7 @@ while(!feof($pipes[0])){
 }
 fclose($pipes[0]);
 echo "[Info] PocketMine-MP stopped: " . proc_close($server);
-if(count(glob($pharPath . "*.phar")) === 0){
+if(!getenv("PHAR_CREATED")){
     echo "[Error] Plugin PHAR was not created!";
     exit(1);
 }

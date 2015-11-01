@@ -64,8 +64,8 @@ namespace TravisBuilder{
 
         public function onRun($currentTick){
             $description = $this->plugin->getDescription();
-            $pluginPath = $this->getPlugin()->getDataFolder() . DIRECTORY_SEPARATOR . $this->getPlugin()->pharName($this->plugin) . ".phar";
-            $pharPath = getenv("PHAR_PATH");
+            $pluginPath = $this->getPlugin()->getServer()->getPluginPath() . $this->plugin->getDataFolder() . "/";
+            $pharPath = getenv("PHAR_PATH") . "/" . $description->getName() . ".phar";
             if(!is_dir($pharPath)){
                 mkdir($pharPath);
             }
@@ -86,7 +86,7 @@ namespace TravisBuilder{
             $phar->startBuffering();
             foreach(new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($pluginPath)) as $file){
                 $path = ltrim(str_replace(["\\", $pluginPath], ["/", ""], $file), "/");
-                if(($path{0} === "." or strpos($path, "/.") !== false) or $file === "plugin.yml" or (strpos($path, "resources/") !== false or strpos($path, "src/"))){
+                if(($path{0} === "." or strpos($path, "/.") !== false) or $file === "plugin.yml" or (strpos($path, "resources") !== false or strpos($path, "src"))){
                     continue;
                 }
                 $phar->addFile($file, $path);
@@ -99,6 +99,7 @@ namespace TravisBuilder{
                 }
             }
             $phar->stopBuffering();
+            putenv("PHAR_CREATED=true");
             echo "[Info] PHAR file successfully created! Stopping server...";
             $this->getPlugin()->getServer()->shutdown();
             return true;
