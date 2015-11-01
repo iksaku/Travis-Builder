@@ -24,8 +24,8 @@ exec("mkdir server");
 exec("mkdir build");
 chdir("server");
 exec("mkdir plugins");
-exec("cp " . getenv("TRAVIS_BUILD_DIR") . "/travis/TravisBuilder.php " . $rootPath . "server/plugins");
-exec("cp " . getenv("TRAVIS_BUILD_DIR") . " " . $rootPath . "server/plugins/" . array_pop(explode("/", getenv("TRAVIS_REPO_SLUG"))));
+copy(getenv("TRAVIS_BUILD_DIR") . "/travis/TravisBuilder.php", $rootPath . "server/plugins");
+copy(getenv("TRAVIS_BUILD_DIR"), $rootPath . "server/plugins/" . array_pop(explode("/", getenv("TRAVIS_REPO_SLUG"))));
 exec("curl -sL get.pocketmine.net | bash -s - -v " . (getenv("PM_VERSION") !== false ? getenv("PM_VERSION") : "stable"));
 
 echo "[Info] Starting PocketMine-MP...";
