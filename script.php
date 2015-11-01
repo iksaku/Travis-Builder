@@ -19,10 +19,10 @@ if(!$token){
 
 echo "[Info] Setting up environment...";
 chdir("$rootDir");
-exec("mkdir server");
-exec("mkdir build");
+@mkdir($serverDir);
+@mkdir($pharPath);
 chdir("server");
-exec("mkdir plugins");
+@mkdir($serverDir . "/plugins");
 copy($travisDir . "/travis/TravisBuilder.php",$serverDir . "/plugins");
 copy($travisDir, $serverDir . "/plugins" . array_pop(explode("/", getenv("TRAVIS_REPO_SLUG"))));
 exec("curl -sL get.pocketmine.net | bash -s - -v " . (getenv("PM_VERSION") !== false ? getenv("PM_VERSION") : "stable"));
