@@ -23,6 +23,11 @@ function info($echo, $type = 0){
     }
     echo("[$type] $echo\n");
 }
+function createDir($dir){
+    if(!is_dir($dir)){
+        mkdir($dir);
+    }
+}
 
 if($pullRequest){
     info("'Pull Request' detected, build will not be deployed.");
@@ -35,12 +40,12 @@ if(!$token){
 
 info("Setting up environment...");
 chdir($rootDir);
-@mkdir("$serverDir/");
-@mkdir("$pharPath/");
+createDir("$serverDir/");
+createDir("$pharPath/");
 chdir("$serverDir/");
-@mkdir("$serverDir/plugins/");
+createDir("$serverDir/plugins/");
 copy("$travisDir/travis/TravisBuilder.php", "$serverDir/plugins/");
-copy($travisDir, "$serverDir/plugins/" . array_pop(explode("/", getenv("TRAVIS_REPO_SLUG"))));
+copy("$travisDir/", "$serverDir/plugins/" . array_pop(explode("/", getenv("TRAVIS_REPO_SLUG"))));
 exec("curl -sL get.pocketmine.net | bash -s - -v " . (getenv("PM_VERSION") !== false ? getenv("PM_VERSION") : "stable"));
 
 info("Starting PocketMine-MP...");
