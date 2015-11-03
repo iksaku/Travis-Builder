@@ -64,7 +64,7 @@ exec("cp -r $travisDir/ $serverDir/plugins/$pl/");
 exec("wget -q -O - get.pocketmine.net | bash -s - -v " . pm_version());
 
 info("Starting PocketMine-MP...");
-$server = proc_open(PHP_BINARY . "PocketMine-MP.phar --no-wizard --disable-readline", [
+/*$server = proc_open(PHP_BINARY . "PocketMine-MP.phar --no-wizard --disable-readline", [
     0 => ["pipe" => "r"],
     1 => ["pipe" => "w"],
     2 => ["pipe" => "w"]
@@ -76,7 +76,8 @@ while(!feof($pipes[1])){
 fclose($pipes[0]);
 fclose($pipes[1]);
 fclose($pipes[2]);
-info("PocketMine-MP stopped: " . proc_close($server));
+info("PocketMine-MP stopped: " . proc_close($server));*/
+exec("./start.sh");
 if(!getenv("PHAR_CREATED")){
     echo "[Error] Plugin PHAR was not created!";
     exit(1);
