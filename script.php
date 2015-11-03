@@ -45,10 +45,8 @@ createDir("$pharPath/");
 chdir("$serverDir/");
 createDir("$serverDir/plugins/");
 exec("cp -r $travisDir/travis/TravisBuilder.php $serverDir/plugins/");
-$pl = getenv("TRAVIS_REPO_SLUG");
-    $pl = explode("/", $pl);
+$pl = explode("/", getenv("TRAVIS_REPO_SLUG"));
     $pl = array_pop($pl);
-print_r(array_pop($pl = explode("/", getenv("TRAVIS_REPO_SLUG"))) . "\n");
 exec("cp -r $travisDir/ $serverDir/plugins/$pl/");
 exec("curl -sL get.pocketmine.net | bash -s - -v " . (getenv("PM_VERSION") !== false ? getenv("PM_VERSION") : "stable"));
 
