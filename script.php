@@ -75,7 +75,7 @@ while(!feof($pipes[1])){
 }
 fclose($pipes[0]);
 fclose($pipes[1]);
-fclose($pipes[1]);
+fclose($pipes[2]);
 info("PocketMine-MP stopped: " . proc_close($server));
 if(!getenv("PHAR_CREATED")){
     echo "[Error] Plugin PHAR was not created!";
