@@ -65,12 +65,17 @@ exec("wget -q -O - get.pocketmine.net | bash -s - -v " . pm_version());
 
 info("Starting PocketMine-MP...");
 $server = proc_open(PHP_BINARY . "PocketMine-MP.phar --no-wizard --disable-readline", [
-    0 => ["pipe" => "w"],
+    0 => ["pipe" => "r"],
+    1 => ["pipe" => "w"],
+    2 => ["pipe" => "w"]
 ], $pipes);
-while(!feof($pipes[0])){
-    echo fgets($pipes[0]);
+fwrite($pipes[0], "stop\n\n");
+while(!feof($pipes[1])){
+    echo fgets($pipes[1]);
 }
 fclose($pipes[0]);
+fclose($pipes[1]);
+fclose($pipes[1]);
 info("PocketMine-MP stopped: " . proc_close($server));
 if(!getenv("PHAR_CREATED")){
     echo "[Error] Plugin PHAR was not created!";
