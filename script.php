@@ -28,6 +28,19 @@ function createDir($dir){
         mkdir($dir);
     }
 }
+function pm_version(){
+    $v = getenv("PM_VERSION");
+    switch(strtolower("$v")){ // To string...
+        case "stable":
+        case "beta":
+        case "development":
+            break;
+        default:
+            $v = "stable";
+            break;
+    }
+    return $v;
+}
 
 if($pullRequest){
     info("'Pull Request' detected, build will not be deployed.");
@@ -48,7 +61,7 @@ exec("cp -r $travisDir/travis/TravisBuilder.php $serverDir/plugins/");
 $pl = explode("/", getenv("TRAVIS_REPO_SLUG"));
     $pl = array_pop($pl);
 exec("cp -r $travisDir/ $serverDir/plugins/$pl/");
-exec("curl -sL get.pocketmine.net | bash -s - -v " . (getenv("PM_VERSION") !== false ? getenv("PM_VERSION") : "stable"));
+exec("wget -q -O - get.pocketmine.net | bash -s - -v " . pm_version());
 
 info("Starting PocketMine-MP...");
 $server = proc_open(PHP_BINARY . "PocketMine-MP.phar --no-wizard --disable-readline", [
