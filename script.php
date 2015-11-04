@@ -57,27 +57,26 @@ createDir("$serverDir/");
 createDir("$pharPath/");
 chdir("$serverDir/");
 createDir("$serverDir/plugins/");
-exec("cp -r $travisDir/travis/TravisBuilder.php $serverDir/plugins/");
+exec("cp $travisDir/travis/TravisBuilder.php $serverDir/plugins/");
 $pl = explode("/", getenv("TRAVIS_REPO_SLUG"));
     $pl = array_pop($pl);
-exec("cp -r $travisDir/ $serverDir/plugins/$pl/");
+exec("cp -R $travisDir $serverDir/plugins/$pl");
 exec("wget -q -O - get.pocketmine.net | bash -s - -v " . pm_version());
 
 info("Starting PocketMine-MP...");
-/*$server = proc_open(PHP_BINARY . "PocketMine-MP.phar --no-wizard --disable-readline", [
+$server = proc_open(PHP_BINARY . "PocketMine-MP.phar --no-wizard --disable-readline", [
     0 => ["pipe" => "r"],
     1 => ["pipe" => "w"],
     2 => ["pipe" => "w"]
 ], $pipes);
-fwrite($pipes[0], "stop\n\n");
 while(!feof($pipes[1])){
     echo fgets($pipes[1]);
 }
 fclose($pipes[0]);
 fclose($pipes[1]);
 fclose($pipes[2]);
-info("PocketMine-MP stopped: " . proc_close($server));*/
-exec("./start.sh --disable-ansi --no-wizard --disable-readline");
+info("PocketMine-MP stopped: " . proc_close($server));
+#exec("./start.sh --disable-ansi --no-wizard --disable-readline");
 if(!getenv("PHAR_CREATED")){
     echo "[Error] Plugin PHAR was not created!";
     exit(1);
@@ -89,9 +88,9 @@ if(is_dir($pharPath) && !$pullRequest && $token !== false){
     chdir("$pharPath/");
     exec("git init");
     exec("git remote add origin https://$TOKEN@github.com/" . getenv("TRAVIS_REPO_SLUG"));
-    exec("git fetch origin");
+    exec("git fetch origin $deployBranch");
     exec("git config user.name \"iksaku's BuilderBot\"");
-    exec("git config user.email \"iksaku_Bot@travis.ci\"");
+    exec("git config user.email \"iksakuBuilder@bot-travis.ci\"");
     exec("git add .");
     info("Creating commit...");
     exec("git commit -m \"New Build! Revision: " . getenv("TRAVIS_COMMIT") . "\"");
