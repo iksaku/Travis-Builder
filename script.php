@@ -58,15 +58,15 @@ info("Setting up environment...");
 chdir($rootDir);
 createDir("$serverDir/");
 createDir("$pharPath/");
-chdir("$serverDir/");
-createDir("$serverDir/plugins/");
+chdir("$serverDir");
 exec("cp $travisDir/travis/TravisBuilder.php $serverDir/plugins/");
 $pl = explode("/", getenv("TRAVIS_REPO_SLUG"));
     $pl = array_pop($pl);
+createDir("$serverDir/plugins/");
 exec("cp -R $travisDir $serverDir/plugins/$pl");
 exec("wget -q -O - get.pocketmine.net | bash -s - -v " . pm_version());
 
-info("Starting PocketMine-MP...");
+info("Starting PocketMine-MP..."); // TODO: Fix pthreads error :P
 $server = proc_open(PHP_BINARY . " $serverDir/PocketMine-MP.phar --no-wizard --disable-readline", [
     0 => ["pipe", "r"],
     1 => ["pipe", "w"],
