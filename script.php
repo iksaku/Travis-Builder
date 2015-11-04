@@ -20,6 +20,9 @@ function info($echo, $type = 0){
         case 1:
             $type = "Warning";
             break;
+        case 2:
+            $type = "Error";
+            break;
     }
     echo("[$type] $echo\n");
 }
@@ -77,7 +80,7 @@ fclose($pipes[1]);
 fclose($pipes[2]);
 info("PocketMine-MP stopped: " . proc_close($server));
 if(!getenv("PHAR_CREATED")){
-    echo "[Error] Plugin PHAR was not created!";
+    info("Plugin PHAR was not created!");
     exit(1);
 }
 info("Plugin PHAR successfully created!");
