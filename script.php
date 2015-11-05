@@ -1,4 +1,5 @@
 <?php
+echo("\n\n\n" . getcwd() . "\n" . getenv("TRAVIS_BUILD_DIR") . "\n\n\n");
 $deployBranch = !getenv("DEPLOY_BRANCH") ? getenv("TRAVIS_BRANCH") : getenv("DEPLOY_BRANCH");
 $token = getenv("TOKEN");
 putenv("TOKEN=''");
