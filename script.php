@@ -61,6 +61,7 @@ chdir($rootDir);
 createDir($serverDir);
 createDir($pharPath);
 chdir($serverDir);
+exec("wget -q -O - get.pocketmine.net | bash -s - -v " . pm_version());
 createDir("plugins");
 exec("cp $travisDir/travis/TravisBuilder.php $serverDir/plugins");
 $pl = explode("/", getenv("TRAVIS_REPO_SLUG"));
