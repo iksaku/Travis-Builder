@@ -62,13 +62,13 @@ createDir($serverDir);
 createDir($pharPath);
 chdir($serverDir);
 exec("wget -q -O - get.pocketmine.net | bash -s - -v " . pm_version());
-createDir("plugins");
+createDir("plugins"); // TODO: Fix file copying :P
 exec("cp $travisDir/travis/TravisBuilder.php $serverDir/plugins");
 $pl = explode("/", getenv("TRAVIS_REPO_SLUG"));
     $pl = array_pop($pl);
 exec("cp -R $travisDir $serverDir/plugins/$pl");
 
-info("Starting PocketMine-MP..."); // TODO: Fix pthreads error :P
+info("Starting PocketMine-MP...");
 $server = proc_open(PHP_BINARY . " $serverDir/PocketMine-MP.phar --no-wizard --disable-readline", [
     0 => ["pipe", "r"],
     1 => ["pipe", "w"],
