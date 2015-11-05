@@ -57,13 +57,13 @@ if(!$token){
 info("Setting up environment...");
 exec("pecl install channel://pecl.php.net/pthreads-2.0.10 && pecl install channel://pecl.php.net/weakref-0.2.6 && echo | pecl install channel://pecl.php.net/yaml-1.1.1");
 chdir($rootDir);
-createDir("$serverDir/");
-createDir("$pharPath/");
+createDir($serverDir);
+createDir($pharPath);
 chdir("$serverDir");
-exec("cp $travisDir/travis/TravisBuilder.php $serverDir/plugins/");
+createDir("plugins");
+exec("cp $travisDir/travis/TravisBuilder.php $serverDir/plugins");
 $pl = explode("/", getenv("TRAVIS_REPO_SLUG"));
     $pl = array_pop($pl);
-createDir("$serverDir/plugins/");
 exec("cp -R $travisDir $serverDir/plugins/$pl");
 
 info("Starting PocketMine-MP..."); // TODO: Fix pthreads error :P
