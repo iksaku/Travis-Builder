@@ -1,5 +1,4 @@
 <?php
-echo("\n\n\n" . getcwd() . "\n" . getenv("TRAVIS_BUILD_DIR") . "\n\n\n");
 $deployBranch = !getenv("DEPLOY_BRANCH") ? getenv("TRAVIS_BRANCH") : getenv("DEPLOY_BRANCH");
 $token = getenv("TOKEN");
 putenv("TOKEN=''");
@@ -56,6 +55,7 @@ if(!$token){
 }
 
 info("Setting up environment...");
+exec("pecl install channel://pecl.php.net/pthreads-2.0.10 && pecl install channel://pecl.php.net/weakref-0.2.6 && echo | pecl install channel://pecl.php.net/yaml-1.1.1");
 chdir($rootDir);
 createDir("$serverDir/");
 createDir("$pharPath/");
@@ -65,7 +65,6 @@ $pl = explode("/", getenv("TRAVIS_REPO_SLUG"));
     $pl = array_pop($pl);
 createDir("$serverDir/plugins/");
 exec("cp -R $travisDir $serverDir/plugins/$pl");
-exec("wget -q -O - get.pocketmine.net | bash -s - -v " . pm_version());
 
 info("Starting PocketMine-MP..."); // TODO: Fix pthreads error :P
 $server = proc_open(PHP_BINARY . " $serverDir/PocketMine-MP.phar --no-wizard --disable-readline", [
