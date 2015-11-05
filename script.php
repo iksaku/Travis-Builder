@@ -6,6 +6,7 @@ $pullRequest = getenv("TRAVIS_PULL_REQUEST") === false;
 $travisDir = rtrim(getenv("TRAVIS_BUILD_DIR"), "/");
 $rootDir = explode("/", $travisDir);
     array_pop($rootDir);
+    array_pop($rootDir);
     $rootDir = implode("/", $rootDir);
 $serverDir = "$rootDir/server";
 $pharPath = "$rootDir/build";
@@ -59,7 +60,7 @@ exec("pecl install channel://pecl.php.net/pthreads-2.0.10 && pecl install channe
 chdir($rootDir);
 createDir($serverDir);
 createDir($pharPath);
-chdir("$serverDir");
+chdir($serverDir);
 createDir("plugins");
 exec("cp $travisDir/travis/TravisBuilder.php $serverDir/plugins");
 $pl = explode("/", getenv("TRAVIS_REPO_SLUG"));
