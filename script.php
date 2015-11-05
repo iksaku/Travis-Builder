@@ -29,7 +29,7 @@ function info($echo, $type = 0){
 }
 function createDir($dir){
     if(!is_dir($dir)){
-        mkdir($dir);
+        mkdir($dir, 0777, true);
     }
 }
 function pm_version(){
@@ -62,7 +62,7 @@ createDir($serverDir);
 createDir($pharPath);
 chdir($serverDir);
 exec("wget -q -O - get.pocketmine.net | bash -s - -v " . pm_version());
-createDir("plugins"); // TODO: Fix file copying :P
+createDir("$serverDir/plugins"); // TODO: Fix file copying :P
 exec("cp $travisDir/travis/TravisBuilder.php $serverDir/plugins");
 $pl = explode("/", getenv("TRAVIS_REPO_SLUG"));
     $pl = array_pop($pl);
