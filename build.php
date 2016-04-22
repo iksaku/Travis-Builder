@@ -30,7 +30,7 @@ function validEnv(string $var){
 }
 
 function ensureEnv(string $default, string $otherwise): string{
-    return validEnv($default) !== false ? getenv($default) : (getenv($otherwise) ?? $otherwise);
+    return validEnv($default) !== false ? getenv($default) : (validEnv($otherwise) ? getenv($otherwise) : $otherwise);
 }
 
 if(getenv("TRAVIS_PULL_REQUEST") !== "false"){
