@@ -99,7 +99,7 @@ if($token !== false){
         "git checkout -b " . $branch,
         "git rm -rf * ($build_name)",
         #"mv ../" . $build_name . " " . $build_name,
-        "git add --all",
+        "git add $build_name",
         "git commit -m \"(" . getenv("TRAVIS_BUILD_NUMBER") . ") New Build! Revision: " . getenv("TRAVIS_COMMIT") . "\"",
         "git push",
     ];
