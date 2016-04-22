@@ -17,7 +17,7 @@ function do_command(string $command): bool{
     return $status < 0;
 }
 
-function basename(string $string): string{
+function get_base(string $string): string{
     exec("basename " . $string, $output);
     return $output;
 }
@@ -36,7 +36,7 @@ $name_tags = [
     "@number" => "TRAVIS_BUILD_NUMBER",
     "@commit" => "TRAVIS_COMMIT"
 ];
-$build_name = getenv("BUILD_NAME") ?? basename(REPO);
+$build_name = getenv("BUILD_NAME") ?? get_base(REPO);
 foreach($name_tags as $k => $v){
     if(!empty(getenv($v))){
         str_replace($k, $v, $build_name);
