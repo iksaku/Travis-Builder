@@ -80,24 +80,25 @@ if(!do_command("php -dphar.readonly=0 DevTools.phar --make build --out " . $buil
 }
 info("PHAR successfully built!");
 
-info("Deploying...");
-$git = [
-    "git init",
-    "git remote add build https://" . $token . "@github.com/" . $repo,
-    "git fetch --all",
-    "git config user.name \"TravisBuilder (By @iksaku)\"",
-    "git config user.email \"iksaku@me.com\"",
-    "git checkout -b " . $branch,
-    "git add " . $build_name,
-    "git commit -m \"(" . getenv("TRAVIS_BUILD_NUMBER") . ") New Build! Revision: " . getenv("TRAVIS_COMMIT") . "\"",
-    "git push build " . $branch,
-];
-foreach($git as $cmd){
-    info($cmd);
-    if(!do_command($cmd)){
-        info("Something went wrong while deploying. Is your Token/Information still valid?", 2);
-        exit(1);
+if($token !== false){
+    info("Deploying...");
+    $git = [
+        "git init",
+        "git remote add build https://" . $token . "@github.com/" . $repo,
+        "git fetch --all",
+        "git config user.name \"TravisBuilder (By @iksaku)\"",
+        "git config user.email \"iksaku@me.com\"",
+        "git checkout -b " . $branch,
+        "git add " . $build_name,
+        "git commit -m \"(" . getenv("TRAVIS_BUILD_NUMBER") . ") New Build! Revision: " . getenv("TRAVIS_COMMIT") . "\"",
+        "git push build " . $branch,
+    ];
+    foreach($git as $cmd){
+        if(!do_command($cmd)){
+            info("Something went wrong while deploying. Is your Token/Information still valid?", 2);
+            exit(1);
+        }
     }
-}
 
-info("Successfully Deployed build. Enjoy!");
+    info("Successfully Deployed build. Enjoy!");
+}
