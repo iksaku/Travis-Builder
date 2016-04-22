@@ -18,9 +18,8 @@ function do_command(string $command): bool{
 }
 
 function get_base(string $string): string{
-    echo "\n\n$string\n\n";
-    exec("basename " . $string, $output);
-    return $output[0];
+    $parts = explode("/", $string);
+    return $parts[0];
 }
 
 function validEnv(string $var){
