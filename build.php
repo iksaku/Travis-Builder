@@ -14,7 +14,7 @@ function info(string $message, int $prefix = 0){
 
 function do_command(string $command): bool{
     exec($command, $output, $status);
-    return $status < 0;
+    return $status < 1;
 }
 
 function get_base(string $string): string{
