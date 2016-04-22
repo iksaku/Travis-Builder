@@ -9,7 +9,7 @@ function info(string $message, int $prefix = 0){
     if(!isset($tag[$prefix])){
         $prefix = 1;
     }
-    echo("\n" . $tag[$prefix] . $message);
+    echo("\n[" . $tag[$prefix] . "] " . $message);
 }
 
 function do_command(string $command): bool{
@@ -22,7 +22,7 @@ function get_base(string $string): string{
     return $output;
 }
 
-if(getenv("TRAVIS_PULL_REQUEST") !== false){
+if(getenv("TRAVIS_PULL_REQUEST") !== "false"){
     info("Pull Request detected! Quitting...");
     exit(0);
 }
