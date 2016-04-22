@@ -74,7 +74,7 @@ if(!do_command("curl -sL https://github.com/PocketMine/DevTools/releases/downloa
     exit(1);
 }
 # Build...
-if(!do_command("php -dphar.readonly=0 DevTools.phar --make build --out " . $build_name)){
+if(!do_command("php -dphar.readonly=0 DevTools.phar --make build --out " . $build_name) && !file_exists($build_name)){
     info("Something went wrong while Building. Sorry! :(", 2);
     exit(1);
 }
@@ -87,7 +87,7 @@ $git = [
     "git fetch --all",
     "git config user.name \"TravisBuilder (By @iksaku)\"",
     "git config user.email \"iksaku@me.com\"",
-    "git checkout -b " . $branch . " build/" . $branch,
+    "git checkout -b " . $branch . " build",
     "git add " . $build_name,
     "git commit -m \"(" . getenv("TRAVIS_BUILD_NUMBER") . ") New Build! Revision: " . getenv("TRAVIS_COMMIT") . "\"",
     "git push build HEAD:" . $branch,
