@@ -62,9 +62,9 @@ if(!$token){
 }
 info("Preparing Build environment...");
 @mkdir("build");
-@mkdir("push");
 # Move files to build
-foreach(["resources", "src", "LICENSE", "plugin.yml", "README.md"] as $f){
+$files = ["resources", "src", "LICENSE", "plugin.yml", "README.md"];
+foreach($files as $f){
     if(is_dir($f) or file_exists($f)){
         do_command("mv $f build/$f");
     }
@@ -83,9 +83,13 @@ info("PHAR successfully built!");
 
 if($token !== false){
     info("Deploying...");
+    foreach($files as $f){
+        if(is_dir($f) or file_exists($f)){
+            do_command("mv build/$f $f");
+        }
+    }
     $git = [
-        "cd push/",
-        "git init",
+        "mv " . $build_name . " ../" . $build_name,
         "git remote add build https://" . $token . "@github.com/" . $repo,
         "git fetch --all",
         "git config user.name \"TravisBuilder (By @iksaku)\"",
@@ -93,7 +97,7 @@ if($token !== false){
         "git checkout -b " . $branch,
         "git pull",
         "rm -rf *",
-        "mv ../" . $build_name . " ./" . $build_name,
+        "mv ../" . $build_name . " " . $build_name,
         "git add --all",
         "git commit -m \"(" . getenv("TRAVIS_BUILD_NUMBER") . ") New Build! Revision: " . getenv("TRAVIS_COMMIT") . "\"",
         "git push build " . $branch,
