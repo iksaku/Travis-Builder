@@ -19,7 +19,7 @@ function do_command(string $command): bool{
 
 function get_base(string $string): string{
     exec("basename " . $string, $output);
-    return $output;
+    return $output[0];
 }
 
 if(getenv("TRAVIS_PULL_REQUEST") !== "false"){
