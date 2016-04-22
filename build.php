@@ -82,6 +82,9 @@ info("PHAR successfully built!");
 
 if($token !== false){
     info("Deploying...");
+    do_command("mv " . $build_name . " ../" . $build_name);
+    do_command("rm -rf *");
+    do_command("mv ../" . $build_name . " " . $build_name);
     $git = [
         "git init",
         "git remote add build https://" . $token . "@github.com/" . $repo,
