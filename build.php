@@ -80,19 +80,20 @@ if(!do_command("php -dphar.readonly=0 DevTools.phar --make build --out " . $buil
     info("Something went wrong while Building. Sorry! :(", 2);
     exit(1);
 }
+info("PHAR successfully built!");
 
 info("Deploying...");
 foreach([
-    "git init",
-    "git remote add origin https://" . $token . "@github.com/" . $repo,
-    "git fetch --all",
-    "git config.user.name \"TravisBuilder (By @iksaku)\"",
-    "git config.user.email \"iksaku@me.com\"",
-    "git add " . $build_name,
-    "git commit -m \"New Build! Revision: " . getenv("TRAVIS_COMMIT") . "\"",
-    "git push --force --quiet origin HEAD:" . $branch,
-        ] as $cmd){
-    if(!do_command($cmd)){
+    "git init" => true,
+    "git remote add origin https://" . $token . "@github.com/" . $repo => true,
+    "git fetch --all" => true,
+    "git config.user.name \"TravisBuilder (By @iksaku)\"" => true,
+    "git config.user.email \"iksaku@me.com\"" => true,
+    "git add " . $build_name => true,
+    "git commit -m \"New Build! Revision: " . getenv("TRAVIS_COMMIT") . "\"" => true,
+    "git push --force --quiet origin HEAD:" . $branch => false,
+        ] as $cmd => $check){
+    if(!do_command($cmd) && $check){
         info("Something went wrong while deploying. Is your Token/Information still valid?", 2);
         exit(1);
     }
