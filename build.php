@@ -92,7 +92,7 @@ if($token !== false){
         "mv " . $build_name . " ../" . $build_name,
         "rm -rf *",
         "mv ../" . $build_name . " " . $build_name,
-        "git add .",
+        "git add --all",
         "git commit -m \"(" . getenv("TRAVIS_BUILD_NUMBER") . ") New Build! Revision: " . getenv("TRAVIS_COMMIT") . "\"",
         "git push build " . $branch,
     ];
