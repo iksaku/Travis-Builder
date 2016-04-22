@@ -23,7 +23,8 @@ function get_base(string $string): string{
     return $output[0];
 }
 
-function envExists(string $var){
+function validEnv(string $var){
+    echo "\n\n$var\n\n";
     if(is_string(getenv($var)) && strlen(getenv($var)) > 0){
         return false;
     }
@@ -36,16 +37,16 @@ if(getenv("TRAVIS_PULL_REQUEST") !== "false"){
 }
 
 
-$repo = envExists("DEPLOY_REPO") ?? getenv("TRAVIS_REPO_SLUG");
-$branch = envExists("DEPLOY_REPO" ?? "travis-build");
-$token = envExists("DEPLOY_TOKEN") ?? false;
+$repo = validEnv("DEPLOY_REPO") ?? getenv("TRAVIS_REPO_SLUG");
+$branch = validEnv("DEPLOY_REPO" ?? "travis-build");
+$token = validEnv("DEPLOY_TOKEN") ?? false;
 
 # Mess with Build tags
 $name_tags = [
     "@number" => "TRAVIS_BUILD_NUMBER",
     "@commit" => "TRAVIS_COMMIT"
 ];
-$build_name = get_base(envExists("BUILD_NAME") ?? $repo);
+$build_name = get_base(validEnv("BUILD_NAME") ?? $repo);
 foreach($name_tags as $k => $v){
     if(!empty(getenv($v))){
         str_replace($k, $v, $build_name);
