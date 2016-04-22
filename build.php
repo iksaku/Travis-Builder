@@ -24,13 +24,13 @@ function get_base(string $string): string{
 
 function validEnv(string $var){
     if(!getenv($var) || getenv($var) === null || strlen(getenv($var)) > 0){
-        return false;
+        return null;
     }
     return getenv($var);
 }
 
 function ensureEnv(string $default, string $otherwise): string{
-    return validEnv($default) !== false ? getenv($default) : (validEnv($otherwise) !== false ? getenv($otherwise) : $otherwise);
+    return validEnv($default) ?? (validEnv($otherwise) ?? $otherwise);
 }
 
 if(getenv("TRAVIS_PULL_REQUEST") !== "false"){
@@ -40,11 +40,14 @@ if(getenv("TRAVIS_PULL_REQUEST") !== "false"){
 
 
 $repo = ensureEnv("DEPLOY_REPO", "TRAVIS_REPO_SLUG");
+/*if($repo === "TRAVIS_REPO_SLUG"){
+    $repo = getenv("TRAVIS_REPO_SLUG");
+}*/
 $branch = ensureEnv("DEPLOY_REPO", "travis-build");
 $token = ensureEnv("DEPLOY_TOKEN", "false");
-if($token === "false"){
+/*if($token === "false"){
     $token = false;
-}
+}*/
 var_dump([$repo, $branch, $token]);
 
 # Mess with Build tags
