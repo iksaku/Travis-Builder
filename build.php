@@ -46,6 +46,7 @@ if(substr($build_name, -5, 5) !== ".phar"){
     $build_name .= ".phar";
 }
 define("BUILD_NAME", $build_name);
+echo "\n\n" . BUILD_NAME . "\n\n";
 
 # Get back to workflow...
 if(!TOKEN){
