@@ -95,7 +95,7 @@ if($token !== false){
         "git config user.name \"TravisBuilder (By @iksaku)\"",
         "git config user.email \"iksaku@me.com\"",
         "git checkout -b " . $branch,
-        "git pull",
+        "git pull --all",
         "rm -rf *",
         "mv ../" . $build_name . " " . $build_name,
         "git add --all",
