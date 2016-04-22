@@ -24,7 +24,7 @@ function get_base(string $string): string{
 }
 
 function validEnv(string $var){
-    print_r("\n\n" . getenv($var) . "\n\n");
+    var_dump("\n\n" . getenv($var) . "\n\n");
     if(getenv($var) === null || !is_string(getenv($var)) || strlen(getenv($var)) > 0){
         return false;
     }
