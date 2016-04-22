@@ -89,7 +89,7 @@ if($token !== false){
         }
     }
     $git = [
-        "mv " . $build_name . " ../" . $build_name,
+        #"mv " . $build_name . " ../" . $build_name,
         "git remote set-url origin https://" . $token . "@github.com/" . $repo . ".git",
         "git fetch --all",
         "git pull --all",
@@ -97,8 +97,8 @@ if($token !== false){
         "git config user.email \"iksaku@me.com\"",
         "git config push.default simple",
         "git checkout -b " . $branch,
-        "git rm -rf *",
-        "mv ../" . $build_name . " " . $build_name,
+        "git rm -rf * ($build_name)",
+        #"mv ../" . $build_name . " " . $build_name,
         "git add --all",
         "git commit -m \"(" . getenv("TRAVIS_BUILD_NUMBER") . ") New Build! Revision: " . getenv("TRAVIS_COMMIT") . "\"",
         "git push",
