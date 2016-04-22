@@ -87,10 +87,10 @@ $git = [
     "git fetch --all",
     "git config user.name \"TravisBuilder (By @iksaku)\"",
     "git config user.email \"iksaku@me.com\"",
-    "git checkout -b " . $branch . " build",
+    "git checkout -b " . $branch,
     "git add " . $build_name,
     "git commit -m \"(" . getenv("TRAVIS_BUILD_NUMBER") . ") New Build! Revision: " . getenv("TRAVIS_COMMIT") . "\"",
-    "git push build HEAD:" . $branch,
+    "git push build " . $branch,
 ];
 foreach($git as $cmd){
     info($cmd);
