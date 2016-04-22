@@ -29,7 +29,7 @@ function validEnv(string $var){
     return getenv($var);
 }
 
-function ensureEnv(string $default, mixed $otherwise): mixed{
+function ensureEnv(string $default, $otherwise){
     return validEnv($default) ?? (validEnv($otherwise) ?? $otherwise);
 }
 
