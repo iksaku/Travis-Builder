@@ -90,12 +90,12 @@ if($token !== false){
     }
     $git = [
         "mv " . $build_name . " ../" . $build_name,
-        "git remote add build https://" . $token . "@github.com/" . $repo,
+        "git remote set-url origin https://" . $token . "@github.com/" . $repo . ".git",
         "git fetch --all",
         "git config user.name \"TravisBuilder (By @iksaku)\"",
         "git config user.email \"iksaku@me.com\"",
         "git pull --all",
-        "git checkout build/" . $branch,
+        "git checkout -b " . $branch,
         "rm -rf *",
         "mv ../" . $build_name . " " . $build_name,
         "git add --all",
