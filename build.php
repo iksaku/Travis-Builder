@@ -38,7 +38,6 @@ if(getenv("TRAVIS_PULL_REQUEST") !== "false"){
 $repo = validEnv("DEPLOY_REPO") ?? getenv("TRAVIS_REPO_SLUG");
 $branch = validEnv("DEPLOY_REPO") ?? "travis-build";
 $token = validEnv("DEPLOY_TOKEN") ?? false;
-var_dump([$repo, $branch, $token]);
 
 # Mess with Build tags
 $name_tags = [
@@ -54,7 +53,6 @@ foreach($name_tags as $k => $v){
 if(substr($build_name, -5, 5) !== ".phar"){
     $build_name .= ".phar";
 }
-echo "\n\n" . $build_name . "\n\n";
 
 # Get back to workflow...
 if(!$token){
@@ -84,14 +82,14 @@ info("PHAR successfully built!");
 
 info("Deploying...");
 foreach([
-    "git init" => true,
-    "git remote add origin https://" . $token . "@github.com/" . $repo => true,
-    "git fetch --all" => true,
-    "git config.user.name \"TravisBuilder (By @iksaku)\"" => true,
-    "git config.user.email \"iksaku@me.com\"" => true,
-    "git add " . $build_name => true,
-    "git commit -m \"New Build! Revision: " . getenv("TRAVIS_COMMIT") . "\"" => true,
-    "git push --force --quiet origin HEAD:" . $branch => false,
+    "git init",
+    "git remote add origin https://" . $token . "@github.com/" . $repo,
+    "git fetch --all",
+    "git config.user.name \"TravisBuilder (By @iksaku)\"",
+    "git config.user.email \"iksaku@me.com\"",
+    "git add " . $build_name,
+    "git commit -m \"(" . getenv("TRAVIS_BUILD_NUMBER") . ") New Build! Revision: " . getenv("TRAVIS_COMMIT") . "\"",
+    "git push",
         ] as $cmd => $check){
     if(!do_command($cmd) && $check){
         info("Something went wrong while deploying. Is your Token/Information still valid?", 2);
