@@ -81,17 +81,21 @@ if(!do_command("php -dphar.readonly=0 DevTools.phar --make build --out " . $buil
 info("PHAR successfully built!");
 
 info("Deploying...");
-foreach([
+$git = [
     "git init",
     "git remote add origin https://" . $token . "@github.com/" . $repo,
     "git fetch --all",
     "git config.user.name \"TravisBuilder (By @iksaku)\"",
     "git config.user.email \"iksaku@me.com\"",
+    false,
     "git add " . $build_name,
     "git commit -m \"(" . getenv("TRAVIS_BUILD_NUMBER") . ") New Build! Revision: " . getenv("TRAVIS_COMMIT") . "\"",
     "git push",
-        ] as $cmd => $check){
-    if(!do_command($cmd) && $check){
+];
+foreach($git as $cmd){
+    if(!$cmd){
+        do_command("git checkout -b " . $branch);
+    }elseif(!do_command($cmd)){
         info("Something went wrong while deploying. Is your Token/Information still valid?", 2);
         exit(1);
     }
