@@ -35,16 +35,16 @@ if(getenv("TRAVIS_PULL_REQUEST") !== "false"){
 }
 
 
-define("REPO", envExists("DEPLOY_REPO") ?? getenv("TRAVIS_REPO_SLUG"));
-define("BRANCH", envExists("DEPLOY_REPO" ?? "travis-build"));
-define("TOKEN", envExists("DEPLOY_TOKEN") ?? false);
+$repo = envExists("DEPLOY_REPO") ?? getenv("TRAVIS_REPO_SLUG");
+$branch = envExists("DEPLOY_REPO" ?? "travis-build");
+$token = envExists("DEPLOY_TOKEN") ?? false;
 
 # Mess with Build tags
 $name_tags = [
     "@number" => "TRAVIS_BUILD_NUMBER",
     "@commit" => "TRAVIS_COMMIT"
 ];
-$build_name = get_base(envExists("BUILD_NAME") ?? REPO);
+$build_name = get_base(envExists("BUILD_NAME") ?? $repo);
 foreach($name_tags as $k => $v){
     if(!empty(getenv($v))){
         str_replace($k, $v, $build_name);
@@ -53,14 +53,13 @@ foreach($name_tags as $k => $v){
 if(substr($build_name, -5, 5) !== ".phar"){
     $build_name .= ".phar";
 }
-define("BUILD_NAME", $build_name);
-echo "\n\n" . BUILD_NAME . "\n\n";
+echo "\n\n" . $build_name . "\n\n";
 
 # Get back to workflow...
-if(!TOKEN){
+if(!$token){
     info("No \"Token\" provided, \"Build\" will not be deployed", 1);
 }else{
-    info("Build will deploy to repo: " . REPO . ", branch: " . BRANCH . ". Unless token is invalid...");
+    info("Build will deploy to repo: " . $repo . ", branch: " . $branch . ". Unless token is invalid...");
 }
 info("Preparing Build environment...");
 @mkdir("build");
@@ -76,7 +75,7 @@ if(!do_command("curl -sL https://github.com/PocketMine/DevTools/releases/downloa
     exit(1);
 }
 # Build...
-if(!do_command("php -dphar.readonly=0 DevTools.phar --make build --out " . BUILD_NAME)){
+if(!do_command("php -dphar.readonly=0 DevTools.phar --make build --out " . $build_name)){
     info("Something went wrong while Building. Sorry! :(", 2);
     exit(1);
 }
@@ -84,13 +83,13 @@ if(!do_command("php -dphar.readonly=0 DevTools.phar --make build --out " . BUILD
 info("Deploying...");
 foreach([
     "git init",
-    "git remote add origin https://" . TOKEN . "@github.com/" . REPO,
+    "git remote add origin https://" . $token . "@github.com/" . $repo,
     "git fetch --all",
     "git config.user.name \"TravisBuilder (By @iksaku)\"",
     "git config.user.email \"iksaku@me.com\"",
-    "git add " . BUILD_NAME,
+    "git add " . $build_name,
     "git commit -m \"New Build! Revision: " . getenv("TRAVIS_COMMIT") . "\"",
-    "git push --force --quiet origin HEAD:" . BRANCH,
+    "git push --force --quiet origin HEAD:" . $branch,
         ] as $cmd){
     if(!do_command($cmd)){
         info("Something went wrong while deploying. Is your Token/Information still valid?", 2);
