@@ -19,7 +19,7 @@ function do_command(string $command): bool{
 
 function get_base(string $string): string{
     $parts = explode("/", $string);
-    return $parts[0];
+    return $parts[1];
 }
 
 function validEnv(string $var){
@@ -29,19 +29,15 @@ function validEnv(string $var){
     return getenv($var);
 }
 
-function ensureEnv(string $default, $otherwise){
-    return validEnv($default) ?? (validEnv($otherwise) ?? $otherwise);
-}
-
 if(getenv("TRAVIS_PULL_REQUEST") !== "false"){
     info("Pull Request detected! Quitting...");
     exit(0);
 }
 
 
-$repo = ensureEnv("DEPLOY_REPO", "TRAVIS_REPO_SLUG");
-$branch = ensureEnv("DEPLOY_REPO", "travis-build");
-$token = ensureEnv("DEPLOY_TOKEN", false);
+$repo = validEnv("DEPLOY_REPO") ?? getenv("TRAVIS_REPO_SLUG");
+$branch = validEnv("DEPLOY_REPO") ?? "travis-build";
+$token = validEnv("DEPLOY_TOKEN") ?? false;
 var_dump([$repo, $branch, $token]);
 
 # Mess with Build tags
@@ -49,7 +45,7 @@ $name_tags = [
     "@number" => "TRAVIS_BUILD_NUMBER",
     "@commit" => "TRAVIS_COMMIT"
 ];
-$build_name = get_base(ensureEnv("BUILD_NAME", $repo));
+$build_name = get_base(validEnv("BUILD_NAME") ?? $repo);
 foreach($name_tags as $k => $v){
     if(!empty(getenv($v))){
         str_replace($k, $v, $build_name);
