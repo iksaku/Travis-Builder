@@ -23,8 +23,7 @@ function get_base(string $string): string{
 }
 
 function validEnv(string $var){
-    var_dump(getenv($var));
-    if(getenv($var) === null || !is_string(getenv($var)) || strlen(getenv($var)) > 0){
+    if(!getenv($var) || getenv($var) === null || strlen(getenv($var)) > 0){
         return false;
     }
     return getenv($var);
