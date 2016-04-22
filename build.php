@@ -97,9 +97,10 @@ if($token !== false){
         "git config user.email \"iksaku@me.com\"",
         "git config push.default simple",
         "git checkout -b " . $branch,
-        "git rm -rf * ($build_name)",
+        "rm -rf * ($build_name)",
+        "git rm -rf *",
         #"mv ../" . $build_name . " " . $build_name,
-        "git add $build_name",
+        "git add -A",
         "git commit -m \"(" . getenv("TRAVIS_BUILD_NUMBER") . ") New Build! Revision: " . getenv("TRAVIS_COMMIT") . "\"",
         "git push",
     ];
