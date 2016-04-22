@@ -83,19 +83,18 @@ info("PHAR successfully built!");
 info("Deploying...");
 $git = [
     "git init",
-    "git remote add origin https://" . $token . "@github.com/" . $repo,
+    "git remote add build https://" . $token . "@github.com/" . $repo,
     "git fetch --all",
     "git config.user.name \"TravisBuilder (By @iksaku)\"",
     "git config.user.email \"iksaku@me.com\"",
-    false,
+    "git checkout -b " . $branch . " build/" . $branch,
     "git add " . $build_name,
     "git commit -m \"(" . getenv("TRAVIS_BUILD_NUMBER") . ") New Build! Revision: " . getenv("TRAVIS_COMMIT") . "\"",
-    "git push",
+    "git push build HEAD:" . $branch,
 ];
 foreach($git as $cmd){
-    if(!$cmd){
-        do_command("git checkout -b " . $branch);
-    }elseif(!do_command($cmd)){
+    info($cmd);
+    if(!do_command($cmd)){
         info("Something went wrong while deploying. Is your Token/Information still valid?", 2);
         exit(1);
     }
