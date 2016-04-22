@@ -38,6 +38,7 @@ if(getenv("TRAVIS_PULL_REQUEST") !== "false"){
 $repo = validEnv("DEPLOY_REPO") ?? getenv("TRAVIS_REPO_SLUG");
 $branch = validEnv("DEPLOY_REPO" ?? "travis-build");
 $token = validEnv("DEPLOY_TOKEN") ?? false;
+var_dump([$repo, $branch, $token]);
 
 # Mess with Build tags
 $name_tags = [
