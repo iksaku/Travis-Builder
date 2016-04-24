@@ -120,7 +120,7 @@ if($token !== false){
     if(!do_command([
         "git add " . $build_name,
         "git commit -m \"(" . getenv("TRAVIS_BUILD_NUMBER") . ") New Build! Revision: " . getenv("TRAVIS_COMMIT") . "\"",
-        "git push",
+        "git push --set-upstream origin travis-build",
     ])){
         info("Something went wrong while deploying. Is your Token/Information still valid?", 2);
         exit(1);
