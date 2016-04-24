@@ -27,7 +27,7 @@ function do_command($command): bool{
 
 function get_base(string $string, bool $last = true): string{
     $parts = explode("/", $string);
-    return $last ? $parts[count($parts) + 1] : $parts[0];
+    return $last ? $parts[count($parts) - 1] : $parts[0];
 }
 
 function validEnv(string $var){
