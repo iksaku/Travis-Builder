@@ -110,7 +110,7 @@ if($token !== false){
     exec("git ls-files", $output);
     foreach($output as $f){
         if(is_file($f) and strpos($f, "/") !== false){
-            $f = explode("/", $f)[0];
+            $f = get_base($f, false);
         }
         if($f !== ".gitignore" and $f !== "test.php"){
             exec("git rm -rf " . $f);
