@@ -102,10 +102,12 @@ if($token !== false){
         "git config user.name \"TravisBuilder (By @iksaku)\"",
         "git config user.email \"iksaku@me.com\"",
         "git config push.default simple",
-        "git checkout -b " . $branch,
     ])){
         info("Something went wrong while configuring Git Repo", 2);
         exit(1);
+    }
+    if(!do_command("git checkout --orphan " . $branch)){
+        do_command("git checkout -B " . $branch);
     }
     exec("git ls-files", $output);
     foreach($output as $f){
@@ -120,7 +122,7 @@ if($token !== false){
     if(!do_command([
         "git add " . $build_name,
         "git commit -m \"(" . getenv("TRAVIS_BUILD_NUMBER") . ") New Build! Revision: " . getenv("TRAVIS_COMMIT") . "\"",
-        "git push --force --quiet --set-upstream origin travis-build",
+        "git push --force --quiet --set-upstream origin " . $branch,
     ])){
         info("Something went wrong while deploying. Is your Token/Information still valid?", 2);
         exit(1);
